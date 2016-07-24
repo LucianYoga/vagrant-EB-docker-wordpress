@@ -3,7 +3,9 @@
 ## Create custom wordpress docker image on Vagrant and push to ECR repository
 1. install vagrant https://www.vagrantup.com/downloads.html
 2. vagrant up
-3. In EC2 Container Service > Repositories, click Create repository.  Make sure the repository is in the same region as your EB environment.
+3. vagrant ssh
+4. cd /src
+5. In EC2 Container Service > Repositories, click Create repository.  Make sure the repository is in the same region as your EB environment.
 4. Click View Push Commands and follow the instructions.
 5. Update app/Dockerrun.aws.json "image" section to match fully qualified ECR image name.  Remember, image names in docker are fully qualified.  For example...
 
