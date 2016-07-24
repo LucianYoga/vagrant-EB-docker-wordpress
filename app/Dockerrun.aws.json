@@ -1,0 +1,63 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "volumes": [
+    {
+      "name": "wordpress",
+      "host": {
+        "sourcePath": "/var/app/current/wordpress"
+      }
+    },
+    {
+      "name": "nginx-proxy-conf",
+      "host": {
+        "sourcePath": "/var/app/current/proxy/conf.d"
+      }
+    }
+  ],
+  "containerDefinitions": [
+    {
+      "name": "wordpress",
+			"image": "xxxx.dkr.ecr.us-east-1.amazonaws.com/lucianrepo:latest",
+      "essential": true,
+      "memory": 128,
+      "mountPoints": [
+        {
+          "sourceVolume": "wordpress",
+          "containerPath": "/var/www/html",
+          "readOnly": false
+        }
+      ]
+    },
+    {
+      "name": "nginx-proxy",
+      "image": "nginx",
+      "essential": true,
+      "memory": 128,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": [
+        "wordpress"
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "wordpress",
+          "containerPath": "/var/www/html",
+          "readOnly": false
+        },
+        {
+          "sourceVolume": "awseb-logs-nginx-proxy",
+          "containerPath": "/var/log/nginx"
+        },
+        {
+          "sourceVolume": "nginx-proxy-conf",
+          "containerPath": "/etc/nginx/conf.d",
+          "readOnly": true
+        }
+      ]
+    }
+  ]
+}
